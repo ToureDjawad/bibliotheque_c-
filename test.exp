@@ -1,0 +1,38 @@
+#!/usr/bin/expect -f
+
+# laisse 5 secondes max au programme pour répondre
+set timeout 5
+
+# Si le programme ne répond pas, on affiche une erreur
+expect_after timeout { send_user "\n> ECHEC : Le programme est bloqué !\n" ; exit 1 }
+
+# lance l'application
+spawn ./app
+
+
+# Le programme demande le nom de la bibliothèque
+expect "> Titre de la bibliothèque :"
+send "Bibliothque Test\r"
+
+expect "> Description"
+send "Description de la Bibliothque \r"
+
+# Le programme fait une pause "Appuyez sur Entrée"
+expect "Appuyez sur Entrée"
+send "\r"
+
+#attend que le menu s'affiche
+expect "> Votre choix"
+
+# Entre "6" pour QUITTER directement
+send "6\r"
+
+# attend le sous-menu de quitter
+expect "Votre choix >"
+send "1\r"
+
+# vérifie que le programme s'arrête bien
+expect eof
+
+# Message de réussite pour toi
+send_user "\n> SUCCÈS : Le test est validé !\n"
